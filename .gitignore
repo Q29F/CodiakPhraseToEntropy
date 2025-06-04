@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Jupyter & SageMath notebooks
+.ipynb_checkpoints/
+*.sage.py
+
+# Binder / Build Artifacts
+.env
+*.env
+*.DS_Store
+*.log
+*.sqlite3
+
+# VSCode or other IDE config
+.vscode/
+.idea/
+
+# Exported Data
+entropy_export.csv
+*.pdf
+
+# OS / Misc
+*.swp
+*.zip
+*.bak
