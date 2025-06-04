@@ -1,0 +1,8 @@
+name: codiak-env
+channels:
+  - conda-forge
+dependencies:
+  - sagemath
+  - ipywidgets
+  - pandas
+  - matplotlib
