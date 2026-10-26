@@ -1,0 +1,4 @@
+-r requirements.in
+ipywidgets==8.1.9
+jupyterlab==4.6.4
+certifi>=2026.10.23

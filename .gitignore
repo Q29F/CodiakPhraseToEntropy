@@ -1,4 +1,6 @@
 # Python
+.venv/
+venv/
 __pycache__/
 *.py[cod]
 *.pyo
@@ -11,6 +13,8 @@ __pycache__/
 
 # Binder / Build Artifacts
 .env
+.env.*
+!.env.example
 *.env
 *.DS_Store
 *.log
@@ -21,10 +25,17 @@ __pycache__/
 .idea/
 
 # Exported Data
-entropy_export.csv
+entropy-export.csv
+codiak-result.json
+codiak-samples.csv
 *.pdf
 
 # OS / Misc
 *.swp
 *.zip
 *.bak
+
+# Browser verification dependencies and reports
+node_modules/
+playwright-report/
+test-results/

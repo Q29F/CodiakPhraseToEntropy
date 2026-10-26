@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{csrf-token}}">
+    <meta name="description" content="Explore character-frequency entropy, a length-normalized phase, and the Codiak signed symbolic field using a local Python process.">
+    <title>Codiak workbench | IDMHYSI systems</title>
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/style.css">
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#workbench">Skip to workbench</a>
+    <header class="site-header">
+      <div class="page-width header-content">
+        <a class="brand" href="/">IDMHYSI <span>systems</span></a>
+        <span class="header-project">Codiak</span>
+      </div>
+    </header>
+    <main id="workbench" class="page-width">
+      <section class="intro" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">Character frequencies · phase modulation</p>
+          <h1 id="page-title">Codiak workbench</h1>
+          <p class="intro-description">Follow a phrase from character frequencies to phase. Explore how that phase shifts the signed field.</p>
+        </div>
+        <div class="local-note"><span class="status-dot" aria-hidden="true"></span><span>Calculated by local Python<br><strong>129 samples across −π to π</strong></span></div>
+      </section>
+      <noscript><p class="error-box">Enable JavaScript to calculate, view the curve and download results from this local workbench.</p></noscript>
+      <div class="workbench-grid">
+        <section class="panel input-panel" aria-labelledby="input-heading">
+          <div class="panel-heading"><div><p class="section-number">01 / Input</p><h2 id="input-heading">Choose a phase source</h2></div></div>
+          <form id="calculator" novalidate>
+            <fieldset class="mode-group">
+              <legend>Input mode</legend>
+              <div class="mode-options">
+                <label class="mode-option"><input type="radio" name="mode" value="phrase" aria-label="Phrase mode" checked><span>From a phrase</span></label>
+                <label class="mode-option"><input type="radio" name="mode" value="phase" aria-label="Manual phase mode"><span>Manual phase</span></label>
+              </div>
+            </fieldset>
+            <div id="phrase-controls" class="field-group">
+              <div class="label-row"><label for="phrase">Phrase</label><span id="phrase-count" class="field-count">6 / 2,048</span></div>
+              <textarea id="phrase" name="phrase" rows="4" maxlength="4096" spellcheck="false" aria-describedby="phrase-help phrase-count">Codiak</textarea>
+              <p id="phrase-help" class="field-help">Up to 2,048 Unicode code points. Case and whitespace are counted; character order is discarded.</p>
+            </div>
+            <div id="phase-controls" class="field-group" hidden>
+              <label for="phase">Phase</label>
+              <div class="number-with-unit"><input id="phase" name="phase" type="number" step="any" min="0" max="3.141592653589793" value="0.5" aria-describedby="phase-help" disabled><span>radians</span></div>
+              <p id="phase-help" class="field-help">Choose a finite value from 0 to π (3.141592653589793).</p>
+            </div>
+            <fieldset class="parameter-fields">
+              <legend>Cross-section controls</legend>
+              <p class="field-help parameter-intro">Hold these values constant while x varies.</p>
+              <div class="parameter-grid">
+                <div class="parameter-field"><label for="u">u</label><input id="u" name="u" type="number" step="any" min="-100" max="100" value="1" aria-describedby="amplitude-help"></div>
+                <div class="parameter-field"><label for="v">v</label><input id="v" name="v" type="number" step="any" min="-100" max="100" value="1" aria-describedby="amplitude-help"></div>
+                <div class="parameter-field"><label for="y">y</label><input id="y" name="y" type="number" step="any" min="-10" max="10" value="1" aria-describedby="coordinate-help"></div>
+                <div class="parameter-field"><label for="t">t</label><input id="t" name="t" type="number" step="any" min="-100" max="100" value="0" aria-describedby="coordinate-help"></div>
+              </div>
+              <p id="amplitude-help" class="field-help">u and v: −100 to 100. Together they set the amplitude.</p>
+              <p id="coordinate-help" class="field-help">y: −10 to 10. t: −100 to 100.</p>
+            </fieldset>
+            <div class="form-actions"><button id="calculate" class="button button-primary" type="submit" disabled>Calculate<span aria-hidden="true">→</span></button><button id="reset-inputs" class="button button-secondary" type="button">Reset</button></div>
+          </form>
+          <div class="privacy-note"><strong>Processed on this computer</strong><p>Calculate sends your inputs to the local Python process. Downloads contain the analysis and numeric samples, with the raw phrase omitted.</p></div>
+        </section>
+        <section class="panel result-panel" aria-labelledby="result-heading" aria-busy="false">
+          <div class="panel-heading result-heading"><div><p class="section-number">02 / Result</p><h2 id="result-heading">Inspect the field</h2></div><span id="result-mode" class="small-badge">Ready to calculate</span></div>
+          <p id="status" class="result-status" role="status" aria-live="polite">Choose your inputs, then calculate.</p>
+          <div id="error" class="error-box" role="alert" hidden></div>
+          <div id="empty-result" class="empty-result">
+            <p class="eyebrow">A phase, a curve, a closer look</p>
+            <h3>Your cross-section starts here.</h3>
+            <p>Calculate a phrase or enter a phase to see the field, its symbolic expression and every sampled value.</p>
+            <div class="empty-equation" aria-label="Square root of u squared plus v squared, multiplied by sine of x y plus t plus phase">√(u² + v²) sin(xy + t + φ)</div>
+          </div>
+          <div id="snapshot" hidden>
+            <div class="summary-grid">
+              <section class="phase-card" aria-labelledby="phase-heading"><div class="metric-heading"><h3 id="phase-heading">Selected phase</h3><span>φ</span></div><output id="phase-result" aria-label="Selected phase"></output><p>radians · bounded to [0, π]</p></section>
+              <section id="entropy-card" class="entropy-card" aria-labelledby="entropy-heading"><div class="metric-heading"><h3 id="entropy-heading">Shannon entropy</h3><span>H</span></div><output id="entropy-result" aria-label="Shannon entropy"></output><p>bits per character distribution</p></section>
+              <section id="manual-card" class="manual-card" hidden><h3>Manual phase</h3><p>This calculation uses your numeric phase directly. No phrase analysis is applied.</p></section>
+            </div>
+            <dl id="phrase-metrics" class="phrase-metrics">
+              <div><dt>Normalized entropy</dt><dd><output id="normalized-result" aria-label="Normalized entropy"></output></dd></div>
+              <div><dt>Phrase length</dt><dd><output id="length-result" aria-label="Phrase length"></output><span>code points</span></dd></div>
+              <div><dt>Unique characters</dt><dd><output id="unique-result" aria-label="Unique characters"></output></dd></div>
+            </dl>
+            <p id="normalization-note" class="normalization-note">Normalized entropy divides H by log₂ of the phrase length. Repeating a phrase can change the phase even when its character probabilities stay the same.</p>
+            <section class="curve-section" aria-labelledby="curve-heading">
+              <div class="section-title-row"><div><h3 id="curve-heading">Field cross-section</h3><p id="parameter-summary" class="section-note"></p></div><span class="curve-legend"><span aria-hidden="true"></span>Signed field value</span></div>
+              <div class="chart-container"><svg id="field-chart" viewBox="0 0 720 300" role="img" aria-labelledby="curve-title" aria-describedby="curve-description"><title id="curve-title">Field cross-section</title><desc id="curve-description">A signed field sampled across x from minus pi to pi.</desc></svg></div>
+              <p class="chart-note">The curve shows signed field values. Character-frequency entropy is reported separately above.</p>
+            </section>
+            <details class="expression-details"><summary>Symbolic expression</summary><pre id="expression"></pre><p>The symbolic u(x, y, t) and v(x, y, t) use the selected constants in the sampled cross-section.</p></details>
+            <div class="sample-scroll" role="region" aria-label="Scrollable field samples" tabindex="0"><table class="sample-table"><caption>Field samples</caption><thead><tr><th scope="col">x</th><th scope="col">Field value</th></tr></thead><tbody id="samples-body"></tbody></table></div>
+          </div>
+          <div class="export-row"><p id="export-note">Calculate to create an export.</p><div><button id="download-json" class="button button-secondary" type="button" disabled>Download JSON</button><button id="download-csv" class="button button-secondary" type="button" disabled>Download CSV</button></div></div>
+        </section>
+      </div>
+      <details class="method-panel"><summary><span>How the phase is derived</span><span class="summary-note">Character counts to a signed field</span></summary><div class="method-content"><div><h3>01 / Count characters</h3><p>The adapter applies Unicode NFC normalization and counts code points. Case and whitespace remain significant; order is discarded. Empty text and a single distinct character have entropy zero.</p><code>pᵢ = countᵢ / n<br>H = −Σ pᵢ log₂(pᵢ)</code></div><div><h3>02 / Normalize by length</h3><p>n is the normalized phrase length. This length-based bridge makes repetition affect the phase even when character frequencies are unchanged.</p><code>normalized = clamp(H / log₂(n), 0, 1)<br>φ = π · normalized</code><p>For n ≤ 1, normalized entropy and phase are both zero.</p></div><div><h3>03 / Sample the field</h3><p>The supplied model is a signed symbolic field. With u, v, y and t held constant, the workbench evaluates 129 x positions from −π to π.</p><code>value(x) = hypot(u, v) · sin(xy + t + φ)</code><p>Character frequency describes this text sample; it does not measure meaning or cryptographic strength.</p></div></div></details>
+    </main>
+    <footer class="page-width site-footer"><span>IDMHYSI systems <span aria-hidden="true">/</span> Codiak</span><p>Local Python calculation. Explicit downloads.</p></footer>
+  </body>
+</html>

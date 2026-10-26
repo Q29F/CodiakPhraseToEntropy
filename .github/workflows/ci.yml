@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12.16'
+          cache: pip
+          cache-dependency-path: requirements-notebook.txt
+      - run: python -m venv --without-pip .venv
+      - run: >-
+          python -m pip --python .venv install --require-hashes --only-binary=:all: -r requirements-installer.txt
+      - run: >-
+          .venv/bin/python -m pip install --require-hashes --only-binary=:all: -r requirements-notebook.txt
+      - run: echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
+      - run: python -m compileall -q entropy.py simulation.py simulationV2.py workbench.py web.py localServer.py tests
+      - run: python -m unittest discover -s tests -v
+      - run: python -m nbconvert --to notebook --execute CodiakPhraseToEntropySimulationV2.ipynb --output /tmp/codiak-executed.ipynb --ExecutePreprocessor.timeout=60
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:browser
+      - run: npm audit --audit-level=low
+      - run: python -m pip install pip-audit==2.10.1
+      - run: python -m pip_audit -r requirements-notebook.txt -r requirements-installer.txt --disable-pip --no-deps
+
+  container:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Build notebook image
+        run: docker build -f container/Dockerfile -t codiak-check .
+      - name: Check isolated runtime and CLI
+        run: docker run --rm -i --network none codiak-check python - < tests/container.py
+      - name: Check default notebook authentication
+        run: |
+          trap 'docker rm -f codiak-notebook >/dev/null 2>&1 || true' EXIT
+          docker run --detach --network none --name codiak-notebook codiak-check >/dev/null
+          docker exec -i codiak-notebook python - --notebook < tests/container.py
