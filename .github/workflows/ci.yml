@@ -34,7 +34,7 @@ jobs:
       - run: python -m compileall -q entropy.py simulation.py simulationV2.py workbench.py web.py localServer.py tests
       - run: python -m unittest discover -s tests -v
       - run: python -m nbconvert --to notebook --execute CodiakPhraseToEntropySimulationV2.ipynb --output /tmp/codiak-executed.ipynb --ExecutePreprocessor.timeout=60
-      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: '24'
           cache: npm
