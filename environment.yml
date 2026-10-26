@@ -2,7 +2,9 @@ name: codiak-env
 channels:
   - conda-forge
 dependencies:
-  - sagemath
-  - ipywidgets
-  - pandas
-  - matplotlib
+  - python>=3.12.16,<3.13
+  - pip>=26.2.2
+  - pip:
+      - --require-hashes
+      - "--only-binary=:all:"
+      - -r requirements-notebook.txt
