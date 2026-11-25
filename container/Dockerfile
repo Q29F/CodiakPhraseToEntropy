@@ -1,38 +1,11 @@
-FROM python:3.12.15-slim-bookworm@sha256:34386ef0cb081344d7ec1c103ba398e6e9f64e9ab3a1509accc92a4e24a07258 AS python-build
+FROM python:3.12.16-slim-trixie@sha256:a0e2dd78cc679ddfffea960fe45ecfcff9ac2f68d67917a0edfcde5c2100151b
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-       build-essential ca-certificates wget xz-utils libssl-dev zlib1g-dev \
-       libbz2-dev libffi-dev liblzma-dev libreadline-dev libsqlite3-dev \
-       libncursesw5-dev libgdbm-dev uuid-dev \
+    && apt-get install -y --no-install-recommends --only-upgrade libzstd1 \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /tmp/python-source
-RUN wget -q -O /tmp/python.tar.xz https://www.python.org/ftp/python/3.12.16/Python-3.12.16.tar.xz \
-    && echo 'b5796915dc45ff745cfb4e990a7e7c93d6f546328a102ce31448d69ebc37575c  /tmp/python.tar.xz' | sha256sum -c - \
-    && tar -xJf /tmp/python.tar.xz --strip-components=1 \
-    && ./configure --enable-shared --with-ensurepip=install LDFLAGS='-Wl,-rpath=/usr/local/lib' \
-    && make -j2 \
-    && rm -rf /usr/local/lib/python3.12 /usr/local/include/python3.12 \
-    && make install \
-    && ldconfig
-
-FROM python:3.12.15-slim-bookworm@sha256:34386ef0cb081344d7ec1c103ba398e6e9f64e9ab3a1509accc92a4e24a07258
-
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-       ca-certificates libbz2-1.0 libffi8 liblzma5 libreadline8 libsqlite3-0 \
-       libssl3 libncursesw6 libtinfo6 libgdbm6 libgdbm-compat4 libuuid1 zlib1g \
-    && rm -rf /var/lib/apt/lists/* /usr/local/lib/python3.12 /usr/local/include/python3.12
-COPY --from=python-build /usr/local/ /usr/local/
-
 ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1 \
-    PYTHON_VERSION=3.12.16 \
-    PYTHON_SHA256=b5796915dc45ff745cfb4e990a7e7c93d6f546328a102ce31448d69ebc37575c
-
-RUN ldconfig \
-    && python -c 'import sys, ssl, _hashlib, sqlite3, bz2, lzma, zlib, ctypes, readline, pyexpat; assert sys.version_info[:3] == (3, 12, 16); assert pyexpat.version_info >= (2, 9, 0)'
+    PYTHONUNBUFFERED=1
 
 COPY requirements-installer.txt /tmp/requirements-installer.txt
 RUN python -m venv --without-pip /opt/codiak \

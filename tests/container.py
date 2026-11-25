@@ -57,6 +57,24 @@ def check_cli() -> None:
         assert rows[0]["expression"] == result.stdout.strip(), "CLI output and export disagree"
 
 
+def check_os_security_versions() -> None:
+    minimum_versions = {
+        "apt": "3.0.4",  # CVE-2026-109518
+        "libzstd1": "1.5.7+dfsg-1+deb13u1",  # CVE-2026-124851
+        "zlib1g": "1:1.3.dfsg+really1.3.1-1+deb13u1",  # CVE-2026-85091
+    }
+    for package, minimum_version in minimum_versions.items():
+        installed_version = subprocess.check_output(
+            ["dpkg-query", "--show", "--showformat=${Version}", package],
+            text=True, timeout=5,
+        ).strip()
+        comparison = subprocess.run(
+            ["dpkg", "--compare-versions", installed_version, "ge", minimum_version],
+            timeout=5,
+        )
+        assert comparison.returncode == 0, f"{package} {installed_version} is below {minimum_version}"
+
+
 def check_runtime() -> None:
     assert sys.version_info[:3] == (3, 12, 16), "Unexpected Python version"
     assert sys.prefix == "/opt/codiak", "Application virtual environment is not active"
@@ -69,9 +87,10 @@ def check_runtime() -> None:
 
     assert pyexpat.version_info >= (2, 9, 0), "Unexpected Expat version"
     assert Path("CodiakPhraseToEntropySimulationV2.ipynb").is_file(), "Notebook is missing"
+    check_os_security_versions()
     check_dependencies([Path("/tmp/requirements-notebook.txt"), Path("/tmp/requirements-installer.txt")])
     check_cli()
-    print("Container runtime, locked dependencies, and CLI export passed.")
+    print("Container runtime, patched OS package versions, locked dependencies, and CLI export passed.")
 
 
 def request(port: int, path: str, token: str | None = None) -> tuple[int, bytes]:

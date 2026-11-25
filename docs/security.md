@@ -57,8 +57,12 @@ developer. Keep that contract when adding endpoints.
 
 Tests cover mathematical validation, HTTP authorization and framing, resource
 limits, cleanup, real browser behavior, and CSP enforcement. Dependency scans
-cover the committed Python and development locks at scan time. They do not assess
-unknown vulnerabilities or the security of a public hosting environment.
+cover the committed Python and development locks at scan time. The notebook
+container uses the official Python 3.12.16 image on Debian 13, pinned by digest.
+The container smoke test checks Debian's fixed package versions for
+[APT](https://security-tracker.debian.org/tracker/CVE-2026-109518),
+[zlib](https://security-tracker.debian.org/tracker/CVE-2026-85091), and
+[Zstandard](https://security-tracker.debian.org/tracker/CVE-2026-124851).
 
 This loopback transport is not a public production server. Python's
 [HTTP server documentation](https://docs.python.org/3.12/library/http.server.html)

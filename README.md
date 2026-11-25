@@ -118,10 +118,11 @@ docker build -f container/Dockerfile -t codiak-entropy .
 docker run --rm -p 127.0.0.1:8888:8888 codiak-entropy
 ```
 
-Open the token-protected URL in the container log. The image builds Python 3.12.16
-from its verified source on a pinned base, then installs hash-locked dependencies
-and runs as UID 1000. Download files to retain them before stopping the container.
-CI builds and exercises this image; operating-system package scanning is not included.
+Open the token-protected URL in the container log. The image uses the official
+Python 3.12.16 image on Debian 13, pinned by digest. It installs hash-locked
+dependencies and runs as UID 1000. Download files to retain them before stopping
+the container. CI builds and exercises the image and verifies the Debian APT,
+zlib, and Zstandard patch versions.
 
 ## Verify and maintain
 
