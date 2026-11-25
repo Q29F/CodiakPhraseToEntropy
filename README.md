@@ -1,11 +1,11 @@
-# Codiak Phrase to Entropy
+# Codiak Entropy Lab
 
-A local workbench for character-frequency entropy and the supplied Codiak phase
-model. Enter a phrase or choose a phase, inspect the resulting field, and download
-its numerical samples. The browser interface, command-line examples, and Jupyter
-notebook use the same validated mathematical core.
+A local workbench for exploring character-frequency entropy and phase modulation.
+Enter a phrase or set a phase directly, see how it shifts a sine-based field, and
+download the numerical samples. The browser, command line, and Jupyter notebook
+share one Python calculation core.
 
-Developed by **Ainsley Leopold-James** as part of the **Codiak Core 0.3 Initiative**.
+Developed by **IDMHYSI systems** as part of the **Codiak Core 0.3 Initiative**.
 
 ## Start the browser interface
 
@@ -37,6 +37,17 @@ application uses no external service or browser storage. It does not log phrases
 and its responses and exports omit raw phrase text. CSV downloads contain only
 numerical samples and fixed column headings.
 
+## Try two phrases
+
+In phrase mode, keep the field controls at their defaults and calculate `ab`,
+then `abab`. Both strings split evenly between `a` and `b`, so both have a
+Shannon entropy of 1 bit per code point. The lab divides that value by the
+log₂ of the phrase length before mapping it to a phase. You should see the
+selected phase change from π to π/2 and the curve shift with it. Calculate
+`baba` to see why reordering the same characters gives the same result.
+
+![Codiak Entropy Lab showing an entropy of 1 bit per code point, a phase of 1.5708 radians, and the field curve for abab](docs/codiak-entropy-lab.png)
+
 ## Mathematical behavior
 
 The original signed field is retained:
@@ -54,11 +65,10 @@ codepoint counts. With text length `n`, it maps `H / log2(n)` into `[0, 1]`, the
 multiplies by pi to obtain the phase. Empty or single-codepoint input gives zero
 by convention. This mapping is an explicit addition to the original phase model.
 
-The interface keeps character entropy separate from the signed field. After NFC
-normalization, only character counts matter. The normalization depends on text
-length: `ab` gives phase pi, whereas `abab` gives pi/2. It does not measure meaning
-or password strength. See [the mathematical contract](docs/mathematics.md) for the exact
-formulas, limits, examples, and interpretation.
+The interface reports character entropy and the signed field separately. The
+statistic describes the distribution of code points in the entered text. See
+[the mathematical contract](docs/mathematics.md) for the formulas, limits, and
+interpretation.
 
 ## Command-line and Python use
 

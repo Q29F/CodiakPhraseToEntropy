@@ -49,7 +49,7 @@ async function screenshot(page, filename) {
   await page.screenshot({ path: join(process.env.CODIAK_SCREENSHOTS, filename), fullPage: true })
 }
 
-test('Codiak workbench in Chromium', { timeout: 90_000 }, async t => {
+test('Codiak Entropy Lab in Chromium', { timeout: 90_000 }, async t => {
   const { origin } = await startWorkbench(t)
   const browser = await chromium.launch({ headless: true })
   t.after(() => browser.close())
@@ -96,7 +96,8 @@ test('Codiak workbench in Chromium', { timeout: 90_000 }, async t => {
     const response = await page.goto(origin)
     assert.equal(response.status(), 200)
     await page.waitForLoadState('networkidle')
-    assert.ok(await page.getByRole('heading', { name: 'Codiak workbench', level: 1 }).isVisible())
+    assert.equal(await page.title(), 'Codiak Entropy Lab | IDMHYSI systems')
+    assert.ok(await page.getByRole('heading', { name: 'Codiak Entropy Lab', level: 1 }).isVisible())
     assert.ok(await page.getByLabel('Phrase mode', { exact: true }).isChecked())
     assert.equal(await page.getByLabel('Phrase', { exact: true }).inputValue(), 'Codiak')
     for (const label of ['Phrase', 'u', 'v', 'y', 't']) {

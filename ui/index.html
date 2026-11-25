@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{csrf-token}}">
     <meta name="description" content="Explore character-frequency entropy, a length-normalized phase, and the Codiak signed symbolic field using a local Python process.">
-    <title>Codiak workbench | IDMHYSI systems</title>
+    <title>Codiak Entropy Lab | IDMHYSI systems</title>
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="/style.css">
     <script src="/app.js" defer></script>
@@ -22,7 +22,7 @@
       <section class="intro" aria-labelledby="page-title">
         <div>
           <p class="eyebrow">Character frequencies · phase modulation</p>
-          <h1 id="page-title">Codiak workbench</h1>
+          <h1 id="page-title">Codiak Entropy Lab</h1>
           <p class="intro-description">Follow a phrase from character frequencies to phase. Explore how that phase shifts the signed field.</p>
         </div>
         <div class="local-note"><span class="status-dot" aria-hidden="true"></span><span>Calculated by local Python<br><strong>129 samples across −π to π</strong></span></div>
@@ -78,7 +78,7 @@
           <div id="snapshot" hidden>
             <div class="summary-grid">
               <section class="phase-card" aria-labelledby="phase-heading"><div class="metric-heading"><h3 id="phase-heading">Selected phase</h3><span>φ</span></div><output id="phase-result" aria-label="Selected phase"></output><p>radians · bounded to [0, π]</p></section>
-              <section id="entropy-card" class="entropy-card" aria-labelledby="entropy-heading"><div class="metric-heading"><h3 id="entropy-heading">Shannon entropy</h3><span>H</span></div><output id="entropy-result" aria-label="Shannon entropy"></output><p>bits per character distribution</p></section>
+              <section id="entropy-card" class="entropy-card" aria-labelledby="entropy-heading"><div class="metric-heading"><h3 id="entropy-heading">Shannon entropy</h3><span>H</span></div><output id="entropy-result" aria-label="Shannon entropy"></output><p>bits per Unicode code point</p></section>
               <section id="manual-card" class="manual-card" hidden><h3>Manual phase</h3><p>This calculation uses your numeric phase directly. No phrase analysis is applied.</p></section>
             </div>
             <dl id="phrase-metrics" class="phrase-metrics">
