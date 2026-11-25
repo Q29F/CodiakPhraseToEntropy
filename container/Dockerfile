@@ -1,4 +1,4 @@
-FROM python:3.12.16-slim-trixie@sha256:a0e2dd78cc679ddfffea960fe45ecfcff9ac2f68d67917a0edfcde5c2100151b
+FROM python:3.15.1-slim-trixie@sha256:533b0b2f9b5d46fd097091cf826f27902f1d6c3bca714b6dc74551356aa97a51
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends --only-upgrade libzstd1 \
